@@ -65,21 +65,61 @@ a { color: inherit; text-decoration: none; }
 .two-cols { display: grid; grid-template-columns: 1fr 280px; gap: 24px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 
-/* Cartes d’article */
+/* ---------- Cartes d’article ---------- */
 .card {
-  border: 1px solid #222; border-radius: 12px; overflow: hidden; background: #111;
-  transition: transform .15s ease, border-color .15s ease;
+  border: 1px solid #222;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
 }
-.card:hover { transform: translateY(-2px); border-color: #2a2a2a; }
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #2a2a2a;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
 
-.card-link { display: block; }
-.card-cover { aspect-ratio: 16/9; background: #222; }
-.card-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-link { display: block; color: inherit; }
+
+.card-cover {
+  position: relative;           /* pour l’overlay date */
+  aspect-ratio: 16/9;
+  background: #1a1a1a;
+}
+.card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ✅ date overlay (bas-droit) */
+.cover-date {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: #ddd;
+  background: rgba(0,0,0,.55);
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  line-height: 1;
+  white-space: nowrap;
+  backdrop-filter: blur(2px) saturate(120%);
+}
 
 .card-body { padding: 12px 14px; }
 
 .chip {
-  font-size: 12px; background: #262626; padding: 4px 8px; border-radius: 999px; color: #bbb;
+  font-size: 12px;
+  background: #262626;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #bbb;
+  display: inline-block;
+  margin-bottom: 6px;
 }
 
 .card h3 { margin: 8px 0 6px; font-size: 18px; color: #fff; }
@@ -87,13 +127,29 @@ a { color: inherit; text-decoration: none; }
 
 /* Sidebar */
 .sidebar {
-  position: sticky; top: 76px; height: fit-content;
-  border: 1px solid #1e1e1e; border-radius: 12px; padding: 16px; background: #0f0f0f;
+  position: sticky;
+  top: 76px;
+  height: fit-content;
+  border: 0;                 /* on enlève le gros cadre global */
+  background: transparent;   /* et on laisse transparent */
+  padding: 0;
 }
-.sidebar h3 { margin: 0 0 8px; }
-.recent { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
-.recent a { color: #ddd; }
-.recent a:hover { color: #fff; }
+
+/* Carte autonome pour chaque section de la sidebar */
+.panel {
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  background: #0f0f0f;
+  padding: 16px;
+}
+
+.panel + .panel {            /* espace entre les deux cartes */
+  margin-top: 16px;
+}
+
+.panel h3 {
+  margin: 0 0 10px;
+}
 
 /* Page article */
 .article .cover { width: 100%; border-radius: 12px; border: 1px solid #222; margin: 8px 0 16px; }
@@ -112,13 +168,8 @@ a { color: inherit; text-decoration: none; }
 
 /* Page 404 */
 .notfound {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 70vh;
-  gap: 16px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; min-height: 70vh; gap: 16px;
 }
 .notfound h1 { font-size: 80px; margin: 0; color: #ff5555; }
 .notfound p { color: #bbb; font-size: 18px; }
@@ -133,147 +184,240 @@ a { color: inherit; text-decoration: none; }
 .muted { color:#9aa; }
 
 /* Skeleton loader */
-.skeleton {
-  position: relative;
-  overflow: hidden;
-  background: #1a1a1a;
-}
+.skeleton { position: relative; overflow: hidden; background: #1a1a1a; }
 .skeleton::after {
-  content: "";
-  position: absolute; inset: 0;
-  transform: translateX(-100%);
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
   background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
   animation: shimmer 1.2s infinite;
 }
-@keyframes shimmer {
-  100% { transform: translateX(100%); }
-}
+@keyframes shimmer { 100% { transform: translateX(100%); } }
 
 /* Barre de progression de lecture */
 .read-progress {
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 3px;
-  width: 0%;
-  z-index: 20; /* > topbar (z-index:10) */
-  background: linear-gradient(90deg, #22d3ee, #a78bfa);
+  position: fixed; left: 0; top: 0; height: 3px; width: 0%;
+  z-index: 20; background: linear-gradient(90deg, #22d3ee, #a78bfa);
   transition: width .1s linear;
 }
 
 /* Navigation précédent / suivant */
 .article-nav {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #1e1e1e;
-  gap: 12px;
+  display: flex; justify-content: space-between;
+  margin-top: 40px; padding-top: 20px; border-top: 1px solid #1e1e1e; gap: 12px;
 }
-
-.article-nav .nav-btn {
-  color: #ddd;
-  font-weight: 500;
-}
-
-.article-nav .nav-btn:hover {
-  color: #fff;
-  text-decoration: underline;
-}
+.article-nav .nav-btn { color: #ddd; font-weight: 500; }
+.article-nav .nav-btn:hover { color: #fff; text-decoration: underline; }
 
 /* Recommandés */
-.recommended {
-  margin-top: 50px;
-}
-.recommended h3 {
-  margin-bottom: 16px;
-  font-size: 20px;
-}
+.recommended { margin-top: 50px; }
+.recommended h3 { margin-bottom: 16px; font-size: 20px; }
 
 /* --- Menu mobile --- */
 .toplinks { display: flex; gap: 16px; }
 
 /* Bouton burger — caché en desktop */
 .menu-btn {
-  display: none;
-  width: 40px; height: 36px;
-  border: 1px solid #2a2a2a;
-  background: #111; color: #eee;
-  border-radius: 8px; cursor: pointer;
-  align-items: center; justify-content: center;
-  padding: 6px 8px;
+  display: none; width: 40px; height: 36px;
+  border: 1px solid #2a2a2a; background: #111; color: #eee;
+  border-radius: 8px; cursor: pointer; align-items: center; justify-content: center; padding: 6px 8px;
 }
-.menu-btn span {
-  display: block;
-  width: 18px; height: 2px; background: #ddd;
-  margin: 3px 0;
-}
+.menu-btn span { display: block; width: 18px; height: 2px; background: #ddd; margin: 3px 0; }
 
 /* Panneau déroulant mobile */
-.mobile-menu {
-  display: none;
-}
+.mobile-menu { display: none; }
 
 /* En dessous de 900px : on bascule en mode mobile */
 @media (max-width: 900px){
-  .toplinks { display: none; }         /* cache les liens desktop */
-  .menu-btn { display: inline-flex; }  /* montre le burger */
-
+  .toplinks { display: none; }
+  .menu-btn { display: inline-flex; }
   .mobile-menu {
-    display: grid;
-    gap: 10px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #1e1e1e;
-    background: #0f0f0f;
+    display: grid; gap: 10px; padding: 12px 16px;
+    border-bottom: 1px solid #1e1e1e; background: #0f0f0f;
   }
-  .mobile-menu .navlink {
-    padding: 10px 0;
-    border-bottom: 1px solid #151515;
-  }
-  .mobile-menu .navlink:last-child {
-    border-bottom: 0;
-  }
+  .mobile-menu .navlink { padding: 10px 0; border-bottom: 1px solid #151515; }
+  .mobile-menu .navlink:last-child { border-bottom: 0; }
 }
 
 /* Partage */
-.sharebar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0 18px;
-}
+.sharebar { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
 .share-btn {
-  padding: 8px 12px;
-  border: 1px solid #2a2a2a;
-  background: #111;
-  color: #ddd;
-  border-radius: 8px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background .15s ease, color .15s ease, border-color .15s ease;
-  font-size: 14px;
+  padding: 8px 12px; border: 1px solid #2a2a2a; background: #111; color: #ddd;
+  border-radius: 8px; text-decoration: none; cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease; font-size: 14px;
 }
 .share-btn:hover { background:#1a1a1a; color:#fff; border-color:#3a3a3a; }
 
 /* Bouton "Retour en haut" */
 .backtotop {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  z-index: 30;
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  border: 1px solid #2a2a2a;
-  background: #111;
-  color: #eee;
-  font-size: 18px;
-  line-height: 1;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  position: fixed; right: 16px; bottom: 16px; z-index: 30;
+  width: 42px; height: 42px; border-radius: 10px; border: 1px solid #2a2a2a;
+  background: #111; color: #eee; font-size: 18px; line-height: 1; cursor: pointer;
+  display: grid; place-items: center; box-shadow: 0 6px 18px rgba(0,0,0,.35);
   transition: transform .15s ease, background .15s ease, border-color .15s ease, opacity .2s ease;
 }
 .backtotop:hover { background:#1a1a1a; border-color:#3a3a3a; transform: translateY(-2px); }
 .backtotop:active { transform: translateY(0); }
+
+/* ===== Countdown ===== */
+.countdown {
+  margin-top: 18px;
+  border: 1px solid #1e1e1e;
+  background: linear-gradient(180deg, rgba(17,17,17,1) 0%, rgba(12,12,12,1) 100%);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.countdown-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 10px; margin-bottom: 10px;
+}
+.countdown h4 {
+  margin: 0; font-size: 16px; color: #fff;
+}
+.countdown-date {
+  font-size: 12px; color: #9aa;
+}
+
+.countdown-body {
+  display: grid; grid-auto-flow: column; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+
+.cd-seg {
+  display: grid; justify-items: center; padding: 8px 10px;
+  background: #0f0f0f; border: 1px solid #1f1f1f; border-radius: 10px;
+  min-width: 64px;
+}
+.cd-value {
+  font-variant-numeric: tabular-nums;
+  font-size: 22px; font-weight: 700; line-height: 1;
+}
+.cd-label { margin-top: 4px; font-size: 11px; color: #9aa; }
+
+.cd-sep {
+  color: #777; padding: 0 2px; font-weight: 600;
+}
+
+/* petit écran */
+@media (max-width: 900px){
+  .countdown-body { gap: 6px; }
+  .cd-seg { min-width: 58px; padding: 7px 8px; }
+  .cd-value { font-size: 20px; }
+}
+.countdown-done {
+  width: 100%;
+  text-align: center;
+  color: #c7ffd1;
+  background: #0a2511;
+  border: 1px solid #1b3a22;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.sidebar h3 { margin-top: 0; }
+.sidebar .countdown { margin-top: 10px; margin-bottom: 16px; }
+
+/* Compte à rebours */
+.countdown {
+  text-align: center;
+  background: linear-gradient(145deg, #111, #0d0d0d);
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+
+.countdown h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  color: #fff;
+}
+
+.countdown .release-date {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #9aa;
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.countdown-box {
+  flex: 1;
+  background: linear-gradient(135deg, #ff4db8, #6bc9ff);
+  border-radius: 8px;
+  padding: 10px 6px;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(0,0,0,.4);
+}
+
+.countdown-box span {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.countdown-box small {
+  display: block;
+  font-size: 12px;
+  opacity: .9;
+}
+
+/* --- Countdown bien centré --- */
+.countdown {
+  text-align: center;
+  background: linear-gradient(145deg, #111, #0d0d0d);
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.countdown h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  color: #fff;
+}
+
+.countdown .release-date {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: #9aa;
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;  /* ✅ centre les blocs */
+  align-items: center;      /* ✅ aligne verticalement */
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.countdown-box {
+  min-width: 70px;          /* ✅ largeur fixe pour équilibrer */
+  text-align: center;
+  background: linear-gradient(135deg, #ff4db8, #6bc9ff);
+  border-radius: 10px;
+  padding: 10px 8px;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(0,0,0,.4);
+}
+
+.countdown-box span {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.countdown-box small {
+  display: block;
+  font-size: 12px;
+  opacity: .9;
+}

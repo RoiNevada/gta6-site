@@ -1,9 +1,9 @@
-// src/pages/HomePage.jsx
 import { useMemo, useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import ArticleCard from "../components/ArticleCard";
 import { articles } from "../data/articles";
 import Seo from "../components/Seo";
+import Countdown from "../components/Countdown";
 
 export default function HomePage() {
   const [q, setQ] = useState("");
@@ -92,25 +92,37 @@ export default function HomePage() {
           </div>
 
           <div className="grid">
-            {filtered.map((a, i) => (
-              <ArticleCard key={a.id} a={a} i={i} />
+            {filtered.map((a) => (
+              <ArticleCard key={a.id} a={a} />
             ))}
           </div>
         </div>
 
         {/* Sidebar */}
         <aside className="sidebar">
-          <h3>Articles récents</h3>
-          <ul className="recent">
-            {recents.map((a) => (
-              <li key={a.id}>
-                <Link to={`/article/${a.slug}`}>{a.title}</Link>
-                <div className="muted" style={{ fontSize: 12 }}>
-                  {a.category}
-                </div>
-              </li>
-            ))}
-          </ul>
+          {/* Carte 1 : Compteur */}
+          <div className="panel">
+            <h3>Compte à rebours</h3>
+            <Countdown
+              target="2026-05-26T00:00:00-04:00" // 26 mai 2026 (ex fuseau EDT)
+              title="Sortie officielle GTA 6"
+            />
+          </div>
+
+          {/* Carte 2 : Récents */}
+          <div className="panel">
+            <h3>Articles récents</h3>
+            <ul className="recent">
+              {recents.map((a) => (
+                <li key={a.id}>
+                  <Link to={`/article/${a.slug}`}>{a.title}</Link>
+                  <div className="muted" style={{ fontSize: 12 }}>
+                    {a.category}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </aside>
       </div>
     </>

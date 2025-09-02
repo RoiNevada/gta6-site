@@ -1,43 +1,35 @@
-// src/components/ArticleCard.jsx
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { readTime } from "../utils/readTime";
 import { motion } from "framer-motion";
+import { formatDate } from "../utils/formatDate";
 
-export default function ArticleCard({ a, i = 0 }) {
-  const [loaded, setLoaded] = useState(false);
-
+export default function ArticleCard({ a }) {
   return (
     <motion.article
+      layout
       className="card"
-      initial={{ opacity: 0, y: 14, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.35, ease: "easeOut", delay: Math.min(i * 0.05, 0.4) }}
-      whileHover={{ y: -3 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.18 }}
     >
-      <Link to={`/article/${a.slug}`} className="card-link">
+      <Link to={`/article/${a.slug}`} className="card-link" aria-label={a.title}>
+        {/* Image de couverture + date en overlay */}
         <div className="card-cover">
-          {/* Skeleton visible tant que l'image n'est pas chargée */}
-          {!loaded && <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
-
-          {a.cover && (
-            <img
-              src={a.cover}
-              alt={a.title}
-              loading="lazy"
-              onLoad={() => setLoaded(true)}
-              style={{ opacity: loaded ? 1 : 0, transition: "opacity .25s ease" }}
-            />
-          )}
+          {a.cover ? <img src={a.cover} alt="" loading="lazy" /> : <div aria-hidden="true" />}
+          <time
+            className="cover-date"
+            dateTime={a.date}
+            aria-label={`Publié le ${formatDate(a.date)}`}
+          >
+            {formatDate(a.date)}
+          </time>
         </div>
 
+        {/* Corps : catégorie (chip), titre, extrait */}
         <div className="card-body">
           <span className="chip">{a.category}</span>
           <h3>{a.title}</h3>
-          {a.excerpt && <p>{a.excerpt}</p>}
-          <p className="muted" style={{ marginTop: 6, fontSize: 13 }}>
-            {readTime(a.content)}
-          </p>
+          <p>{a.excerpt}</p>
         </div>
       </Link>
     </motion.article>
