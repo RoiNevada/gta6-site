@@ -2,7 +2,8 @@
 export function readTime(md = "") {
   const text = md
     .replace(/```[\s\S]*?```/g, "")  // blocs code
-    .replace(/[#>*_\-\[\]\(\)`~]/g, ""); // ponctuation markdown
+    .replace(/[#>*_`~-]/g, "") // ponctuation markdown
+    .replace(/\[|\]|\(|\)/g, "");
   const words = text.trim().split(/\s+/).filter(Boolean).length;
   const mins = Math.max(1, Math.round(words / 200));
   return `${mins} min`;
