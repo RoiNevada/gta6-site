@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { formatDate } from "../utils/formatDate";
 
 export default function ArticleCard({ a }) {
   return (
-    <motion.article
+    <Motion.article
       layout
       className="card"
       initial={{ opacity: 0, y: 10 }}
@@ -32,6 +32,6 @@ export default function ArticleCard({ a }) {
           <p>{a.excerpt}</p>
         </div>
       </Link>
-    </motion.article>
+    </Motion.article>
   );
 }
