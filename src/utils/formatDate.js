@@ -1,7 +1,15 @@
-export function formatDate(iso) {
+// src/utils/formatDate.js
+export function formatDate(isoLike) {
+  if (!isoLike) return "";
+  const d = new Date(isoLike);
+  if (Number.isNaN(d.getTime())) return "";
   try {
-    return new Intl.DateTimeFormat("fr-FR", {
-      day: "2-digit", month: "long", year: "numeric"
-    }).format(new Date(iso));
-  } catch { return iso; }
+    return d.toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  } catch {
+    return "";
+  }
 }

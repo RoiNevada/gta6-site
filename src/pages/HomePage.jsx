@@ -10,13 +10,11 @@ export default function HomePage() {
   const [cat, setCat] = useState("Tous");
   const [params, setSearchParams] = useSearchParams();
 
-  // Lire ?cat= depuis l'URL
   useEffect(() => {
     const fromUrl = params.get("cat");
     setCat(fromUrl || "Tous");
   }, [params]);
 
-  // Écrire ?cat= dans l'URL quand on clique une puce
   function selectCat(c) {
     setCat(c);
     if (c === "Tous") {
@@ -42,10 +40,7 @@ export default function HomePage() {
   });
 
   const recents = useMemo(
-    () =>
-      [...articles]
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 5),
+    () => [...articles].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5),
     []
   );
 
@@ -54,11 +49,7 @@ export default function HomePage() {
       <Seo
         title="GTA 6 – Guides & Actus"
         description="Cartes, missions, personnages, astuces. Tout au même endroit."
-        url={
-          typeof window !== "undefined"
-            ? window.location.origin + "/"
-            : "https://example.com/"
-        }
+        url={typeof window !== "undefined" ? window.location.origin + "/" : "https://example.com/"}
         image="/images/vicecity.jpg"
       />
 
@@ -82,6 +73,7 @@ export default function HomePage() {
                 </button>
               ))}
             </div>
+
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
@@ -92,24 +84,24 @@ export default function HomePage() {
           </div>
 
           <div className="grid">
-            {filtered.map((a) => (
-              <ArticleCard key={a.id} a={a} />
+            {filtered.map((a, i) => (
+              <ArticleCard key={a.id} a={a} i={i} />
             ))}
           </div>
         </div>
 
         {/* Sidebar */}
         <aside className="sidebar">
-          {/* Carte 1 : Compteur */}
+          {/* ✅ Panneau dédié au compte à rebours */}
           <div className="panel">
             <h3>Compte à rebours</h3>
             <Countdown
-              target="2026-05-26T00:00:00-04:00" // 26 mai 2026 (ex fuseau EDT)
+              target="2026-05-26T00:00:00-04:00"
               title="Sortie officielle GTA 6"
             />
           </div>
 
-          {/* Carte 2 : Récents */}
+          {/* Panneau “Articles récents” séparé */}
           <div className="panel">
             <h3>Articles récents</h3>
             <ul className="recent">

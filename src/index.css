@@ -72,7 +72,6 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
   background: #111;
   transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
-  box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 .card:hover {
   transform: translateY(-2px);
@@ -83,7 +82,7 @@ a { color: inherit; text-decoration: none; }
 .card-link { display: block; color: inherit; }
 
 .card-cover {
-  position: relative;           /* pour l’overlay date */
+  position: relative;
   aspect-ratio: 16/9;
   background: #1a1a1a;
 }
@@ -130,26 +129,24 @@ a { color: inherit; text-decoration: none; }
   position: sticky;
   top: 76px;
   height: fit-content;
-  border: 0;                 /* on enlève le gros cadre global */
-  background: transparent;   /* et on laisse transparent */
+  border: 0;
+  background: transparent;
   padding: 0;
 }
 
-/* Carte autonome pour chaque section de la sidebar */
 .panel {
   border: 1px solid #1e1e1e;
   border-radius: 12px;
   background: #0f0f0f;
   padding: 16px;
 }
+.panel + .panel { margin-top: 16px; }
+.panel h3 { margin: 0 0 10px; }
 
-.panel + .panel {            /* espace entre les deux cartes */
-  margin-top: 16px;
-}
-
-.panel h3 {
-  margin: 0 0 10px;
-}
+/* Articles récents */
+.recent { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+.recent a { color: #ddd; }
+.recent a:hover { color: #fff; }
 
 /* Page article */
 .article .cover { width: 100%; border-radius: 12px; border: 1px solid #222; margin: 8px 0 16px; }
@@ -214,7 +211,6 @@ a { color: inherit; text-decoration: none; }
 /* --- Menu mobile --- */
 .toplinks { display: flex; gap: 16px; }
 
-/* Bouton burger — caché en desktop */
 .menu-btn {
   display: none; width: 40px; height: 36px;
   border: 1px solid #2a2a2a; background: #111; color: #eee;
@@ -222,10 +218,7 @@ a { color: inherit; text-decoration: none; }
 }
 .menu-btn span { display: block; width: 18px; height: 2px; background: #ddd; margin: 3px 0; }
 
-/* Panneau déroulant mobile */
 .mobile-menu { display: none; }
-
-/* En dessous de 900px : on bascule en mode mobile */
 @media (max-width: 900px){
   .toplinks { display: none; }
   .menu-btn { display: inline-flex; }
@@ -259,115 +252,6 @@ a { color: inherit; text-decoration: none; }
 
 /* ===== Countdown ===== */
 .countdown {
-  margin-top: 18px;
-  border: 1px solid #1e1e1e;
-  background: linear-gradient(180deg, rgba(17,17,17,1) 0%, rgba(12,12,12,1) 100%);
-  border-radius: 12px;
-  padding: 14px;
-}
-
-.countdown-head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  gap: 10px; margin-bottom: 10px;
-}
-.countdown h4 {
-  margin: 0; font-size: 16px; color: #fff;
-}
-.countdown-date {
-  font-size: 12px; color: #9aa;
-}
-
-.countdown-body {
-  display: grid; grid-auto-flow: column; align-items: center; justify-content: space-between;
-  gap: 8px;
-}
-
-.cd-seg {
-  display: grid; justify-items: center; padding: 8px 10px;
-  background: #0f0f0f; border: 1px solid #1f1f1f; border-radius: 10px;
-  min-width: 64px;
-}
-.cd-value {
-  font-variant-numeric: tabular-nums;
-  font-size: 22px; font-weight: 700; line-height: 1;
-}
-.cd-label { margin-top: 4px; font-size: 11px; color: #9aa; }
-
-.cd-sep {
-  color: #777; padding: 0 2px; font-weight: 600;
-}
-
-/* petit écran */
-@media (max-width: 900px){
-  .countdown-body { gap: 6px; }
-  .cd-seg { min-width: 58px; padding: 7px 8px; }
-  .cd-value { font-size: 20px; }
-}
-.countdown-done {
-  width: 100%;
-  text-align: center;
-  color: #c7ffd1;
-  background: #0a2511;
-  border: 1px solid #1b3a22;
-  border-radius: 8px;
-  padding: 10px 12px;
-}
-
-.sidebar h3 { margin-top: 0; }
-.sidebar .countdown { margin-top: 10px; margin-bottom: 16px; }
-
-/* Compte à rebours */
-.countdown {
-  text-align: center;
-  background: linear-gradient(145deg, #111, #0d0d0d);
-  border: 1px solid #1e1e1e;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,.35);
-}
-
-.countdown h3 {
-  margin: 0 0 4px;
-  font-size: 18px;
-  color: #fff;
-}
-
-.countdown .release-date {
-  margin: 0 0 12px;
-  font-size: 13px;
-  color: #9aa;
-}
-
-.countdown-grid {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.countdown-box {
-  flex: 1;
-  background: linear-gradient(135deg, #ff4db8, #6bc9ff);
-  border-radius: 8px;
-  padding: 10px 6px;
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 0 3px 10px rgba(0,0,0,.4);
-}
-
-.countdown-box span {
-  display: block;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.countdown-box small {
-  display: block;
-  font-size: 12px;
-  opacity: .9;
-}
-
-/* --- Countdown bien centré --- */
-.countdown {
   text-align: center;
   background: linear-gradient(145deg, #111, #0d0d0d);
   border: 1px solid #1e1e1e;
@@ -393,14 +277,14 @@ a { color: inherit; text-decoration: none; }
 
 .countdown-grid {
   display: flex;
-  justify-content: center;  /* ✅ centre les blocs */
-  align-items: center;      /* ✅ aligne verticalement */
+  justify-content: center;
+  align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
 
 .countdown-box {
-  min-width: 70px;          /* ✅ largeur fixe pour équilibrer */
+  min-width: 70px;
   text-align: center;
   background: linear-gradient(135deg, #ff4db8, #6bc9ff);
   border-radius: 10px;
@@ -421,3 +305,33 @@ a { color: inherit; text-decoration: none; }
   font-size: 12px;
   opacity: .9;
 }
+
+/* Fallback visuel si l'image ne charge pas */
+.cover-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  align-content: end;
+  padding: 12px;
+  background:
+    radial-gradient(1200px 400px at 100% 0%, rgba(107,201,255,0.25), transparent),
+    radial-gradient(1200px 400px at 0% 100%, rgba(255,77,184,0.25), transparent),
+    #161616;
+  color: #eee;
+}
+.cover-fallback .cf-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid #2a2a2a;
+  border-radius: 999px;
+  background: rgba(0,0,0,.35);
+  color: #ccc;
+  margin-bottom: 6px;
+}
+.cover-fallback .cf-title {
+  font-weight: 700;
+  font-size: 16px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.4);
+}
+

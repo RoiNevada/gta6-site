@@ -13,7 +13,7 @@ export default function ArticleCard({ a }) {
       transition={{ duration: 0.18 }}
     >
       <Link to={`/article/${a.slug}`} className="card-link" aria-label={a.title}>
-        {/* Image de couverture + date en overlay */}
+        {/* Image + date en overlay */}
         <div className="card-cover">
           {a.cover ? <img src={a.cover} alt="" loading="lazy" /> : <div aria-hidden="true" />}
           <time
@@ -25,9 +25,9 @@ export default function ArticleCard({ a }) {
           </time>
         </div>
 
-        {/* Corps : catégorie (chip), titre, extrait */}
+        {/* Corps */}
         <div className="card-body">
-          <span className="chip">{a.category}</span>
+          <div className="chip">{a.category}</div>
           <h3>{a.title}</h3>
           <p>{a.excerpt}</p>
         </div>

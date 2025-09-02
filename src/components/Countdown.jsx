@@ -1,56 +1,58 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-export default function Countdown({ target, title }) {
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft());
+function diffParts(targetDate) {
+  const now = new Date();
+  const ms = Math.max(0, targetDate - now);
 
-  function getTimeLeft() {
-    const end = new Date(target).getTime();
-    const now = new Date().getTime();
-    const diff = end - now;
+  const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((ms / (1000 * 60)) % 60);
+  const seconds = Math.floor((ms / 1000) % 60);
 
-    if (diff <= 0) return { d: 0, h: 0, m: 0, s: 0 };
+  return { days, hours, minutes, seconds };
+}
 
-    return {
-      d: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      h: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      m: Math.floor((diff / (1000 * 60)) % 60),
-      s: Math.floor((diff / 1000) % 60),
-    };
-  }
+export default function Countdown({
+  target = "2026-05-26T00:00:00-04:00",
+  title = "Sortie officielle GTA 6",
+}) {
+  const targetDate = useMemo(() => new Date(target), [target]);
+  const [t, setT] = useState(() => diffParts(targetDate));
 
   useEffect(() => {
-    const timer = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+    const id = setInterval(() => setT(diffParts(targetDate)), 1000);
+    return () => clearInterval(id);
+  }, [targetDate]);
+
+  const nice = new Intl.DateTimeFormat("fr-FR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(targetDate);
 
   return (
-    <div className="countdown">
-      <h3>{title}</h3>
-      <p className="release-date">
-        {new Date(target).toLocaleDateString("fr-FR", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}
-      </p>
-      <div className="countdown-grid">
-        <div className="countdown-box">
-          <span>{timeLeft.d}</span>
-          <small>jours</small>
+    <section className="panel countdown" aria-live="polite">
+      <h3 className="cd-title">{title}</h3>
+      <p className="release-date">{nice}</p>
+
+      <div className="countdown-grid" role="group" aria-label="compte à rebours">
+        <div className="countdown-box" aria-label={`${t.days} jours`}>
+          <span className="cd-big">{t.days}</span>
+          <small className="cd-label">jours</small>
         </div>
-        <div className="countdown-box">
-          <span>{timeLeft.h}</span>
-          <small>heures</small>
+        <div className="countdown-box" aria-label={`${t.hours} heures`}>
+          <span className="cd-big">{t.hours}</span>
+          <small className="cd-label">heures</small>
         </div>
-        <div className="countdown-box">
-          <span>{timeLeft.m}</span>
-          <small>minutes</small>
+        <div className="countdown-box" aria-label={`${t.minutes} minutes`}>
+          <span className="cd-big">{t.minutes}</span>
+          <small className="cd-label">minutes</small>
         </div>
-        <div className="countdown-box">
-          <span>{timeLeft.s}</span>
-          <small>secondes</small>
+        <div className="countdown-box" aria-label={`${t.seconds} secondes`}>
+          <span className="cd-big">{t.seconds}</span>
+          <small className="cd-label">secondes</small>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
