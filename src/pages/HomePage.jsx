@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import { motion as Motion } from "framer-motion";
 import ArticleCard from "../components/ArticleCard";
 import { articles } from "../data/articles";
 import Seo from "../components/Seo";
@@ -56,12 +57,22 @@ export default function HomePage() {
       <div className="container two-cols">
         {/* Colonne principale */}
         <div>
-          <header className="hero">
+          <Motion.header
+            className="hero"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
             <h1>GTA 6 – Guides & Actus</h1>
             <p>Cartes, missions, personnages, astuces. Tout au même endroit.</p>
-          </header>
+          </Motion.header>
 
-          <div className="toolbar">
+          <Motion.div
+            className="toolbar"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
             <div className="chips">
               {categories.map((c) => (
                 <button
@@ -81,7 +92,7 @@ export default function HomePage() {
               className="search"
               aria-label="Rechercher"
             />
-          </div>
+          </Motion.div>
 
           <div className="grid">
             {filtered.map((a, i) => (

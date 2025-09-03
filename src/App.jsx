@@ -1,7 +1,7 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
 import { Routes, Route, NavLink, Link, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion as Motion } from "framer-motion";
 import HomePage from "./pages/HomePage";
 import ArticlePage from "./pages/ArticlePage";
 import NotFound from "./pages/NotFound";
@@ -35,7 +35,12 @@ export default function App() {
     <div className="site">
       <ScrollToTop />
 
-      <nav className="topbar">
+      <Motion.nav
+        className="topbar"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
         <Link to="/" className="brand">
           <img src="/images/logo.png" alt="GTA 6" className="brand-logo" />
           <span className="brand-text">GTA 6 Blog</span>
@@ -62,17 +67,25 @@ export default function App() {
           <span />
           <span />
         </button>
-      </nav>
+      </Motion.nav>
 
       {/* Menu mobile déroulant */}
-      {menuOpen && (
-        <div className="mobile-menu">
-          <CatLink cat="Actualités" onClick={() => setMenuOpen(false)}>Actualités</CatLink>
-          <CatLink cat="Missions" onClick={() => setMenuOpen(false)}>Missions</CatLink>
-          <CatLink cat="Gameplay" onClick={() => setMenuOpen(false)}>Gameplay</CatLink>
-          <CatLink cat="Online" onClick={() => setMenuOpen(false)}>Online</CatLink>
-        </div>
-      )}
+      <AnimatePresence>
+        {menuOpen && (
+          <Motion.div
+            className="mobile-menu"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <CatLink cat="Actualités" onClick={() => setMenuOpen(false)}>Actualités</CatLink>
+            <CatLink cat="Missions" onClick={() => setMenuOpen(false)}>Missions</CatLink>
+            <CatLink cat="Gameplay" onClick={() => setMenuOpen(false)}>Gameplay</CatLink>
+            <CatLink cat="Online" onClick={() => setMenuOpen(false)}>Online</CatLink>
+          </Motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Transitions entre pages */}
       <AnimatePresence mode="wait">
