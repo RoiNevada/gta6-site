@@ -5,7 +5,8 @@ import { renderMD } from "../utils/md";
 import { formatDate } from "../utils/formatDate";
 import { readTime } from "../utils/readTime";
 import ScrollProgress from "../components/ScrollProgress";
-import ArticleCard from "../components/ArticleCard";
+import LazyArticleCard from "../components/LazyArticleCard";
+import LazyImage from "../components/LazyImage";
 import Seo from "../components/Seo";
 import ShareBar from "../components/ShareBar";
 
@@ -66,7 +67,7 @@ export default function ArticlePage() {
         {/* Barre de partage */}
         <ShareBar title={a.title} url={canonicalUrl} />
 
-        {a.cover && <img className="cover" src={a.cover} alt={a.title} />}
+        {a.cover && <LazyImage className="cover" src={a.cover} alt={a.title} />}
 
         <div
           className="content"
@@ -79,7 +80,7 @@ export default function ArticlePage() {
             <h3>Articles similaires</h3>
             <div className="grid">
               {recommended.map((r, i) => (
-                <ArticleCard key={r.id} a={r} i={i} />
+                <LazyArticleCard key={r.id} a={r} i={i} />
               ))}
             </div>
           </div>

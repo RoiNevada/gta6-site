@@ -1,7 +1,8 @@
 import { useMemo, useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
-import ArticleCard from "../components/ArticleCard";
+import LazyArticleCard from "../components/LazyArticleCard";
+import LazyImage from "../components/LazyImage";
 import { articles } from "../data/articles";
 import Seo from "../components/Seo";
 import Countdown from "../components/Countdown";
@@ -96,7 +97,7 @@ export default function HomePage() {
 
           <div className="grid">
             {filtered.map((a, i) => (
-              <ArticleCard key={a.id} a={a} i={i} />
+              <LazyArticleCard key={a.id} a={a} i={i} />
             ))}
           </div>
         </div>
@@ -117,11 +118,21 @@ export default function HomePage() {
             <h3>Articles récents</h3>
             <ul className="recent">
               {recents.map((a) => (
-                <li key={a.id}>
-                  <Link to={`/article/${a.slug}`}>{a.title}</Link>
-                  <div className="muted" style={{ fontSize: 12 }}>
-                    {a.category}
-                  </div>
+                <li key={a.id} className="recent-item">
+                  <Link to={`/article/${a.slug}`} className="recent-link">
+                    <div className="thumb">
+                      <LazyImage
+                        src={a.cover}
+                        alt={a.title}
+                        width={60}
+                        height={60}
+                      />
+                    </div>
+                    <div className="info">
+                      <span className="title">{a.title}</span>
+                      <span className="muted category">{a.category}</span>
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>

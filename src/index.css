@@ -144,9 +144,57 @@ a { color: inherit; text-decoration: none; }
 .panel h3 { margin: 0 0 10px; }
 
 /* Articles récents */
-.recent { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
-.recent a { color: #ddd; }
-.recent a:hover { color: #fff; }
+.recent {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 10px;
+}
+.recent-item {
+  overflow: hidden;
+  border-radius: 8px;
+}
+.recent-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #ddd;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+.recent-link:hover {
+  color: #fff;
+  background: #111;
+}
+.recent .thumb {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 6px;
+}
+.recent .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.recent-link:hover .thumb img {
+  transform: scale(1.1);
+}
+.recent .info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.recent .title {
+  font-size: 14px;
+}
+.recent .category {
+  font-size: 12px;
+}
 
 /* Page article */
 .article .cover { width: 100%; border-radius: 12px; border: 1px solid #222; margin: 8px 0 16px; }
