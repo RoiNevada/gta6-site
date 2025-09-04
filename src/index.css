@@ -1,4 +1,7 @@
-:root { color-scheme: dark; }
+:root {
+  color-scheme: dark;
+  --focus-ring: #7dd3fc; /* cyan focus ring, good contrast on dark */
+}
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 
@@ -28,7 +31,10 @@ a { color: inherit; text-decoration: none; }
 
 .navlink { color: #b9b9b9; padding: 6px 2px; }
 .navlink:hover { color: #fff; }
-.navlink-active { color: #fff; border-bottom: 2px solid #555; }
+.navlink-active {
+  color: #fff;
+  border-bottom: 2px solid var(--focus-ring);
+}
 
 .spacer { flex: 1; }
 
@@ -50,8 +56,15 @@ a { color: inherit; text-decoration: none; }
 
 .chip-btn:focus-visible,
 .navlink:focus-visible,
-.search:focus-visible {
-  outline: 2px solid #666; outline-offset: 2px;
+.search:focus-visible,
+.menu-btn:focus-visible,
+.share-btn:focus-visible,
+.backtotop:focus-visible,
+.card-link:focus-visible,
+.recent-link:focus-visible,
+.article-nav .nav-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .search {
@@ -143,14 +156,7 @@ a { color: inherit; text-decoration: none; }
 .panel + .panel { margin-top: 16px; }
 .panel h3 { margin: 0 0 10px; }
 
-/* Articles récents */
-.recent { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
-.recent-item { display: flex; align-items: center; gap: 12px; color: #ddd; }
-.recent-item:hover { color: #fff; }
-.recent-thumb { width: 80px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
-.recent-thumb > div { height: 100%; }
-.recent-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; display: block; }
-.recent-item:hover .recent-thumb img { transform: scale(1.1); }
+/* (supprimé: ancien style "Articles récents" redondant avec la version vignettes plus bas) */
 
 /* Page article */
 .article .cover { width: 100%; border-radius: 12px; border: 1px solid #222; margin: 8px 0 16px; }
@@ -193,6 +199,38 @@ a { color: inherit; text-decoration: none; }
 }
 @keyframes shimmer { 100% { transform: translateX(100%); } }
 
+/* Accessibilité: réduire les animations si demandé */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card:hover,
+  .backtotop:hover,
+  .menu-btn:active,
+  .share-btn:active,
+  .chip-btn:active,
+  .recent-link:active,
+  .recent-link:hover .recent-thumb img {
+    transform: none !important;
+  }
+  .read-progress { transition: none !important; }
+}
+
+/* Contraste renforcé si demandé */
+@media (prefers-contrast: more) {
+  :root { --focus-ring: #fff; }
+  .navlink-active { border-bottom-width: 3px; }
+  .footer, .panel, .topbar, .mobile-menu, .article-nav, .recent-link,
+  .menu-btn, .share-btn, .backtotop, .card, .article .cover {
+    border-color: #3a3a3a !important;
+  }
+  .hero p, .muted, .article .muted, .recent-cat { color: #cfd8dc !important; }
+}
+
 /* Barre de progression de lecture */
 .read-progress {
   position: fixed; left: 0; top: 0; height: 3px; width: 0%;
@@ -220,7 +258,11 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid #2a2a2a; background: #111; color: #eee;
   border-radius: 8px; cursor: pointer; align-items: center; justify-content: center; padding: 6px 8px;
 }
-.menu-btn span { display: block; width: 18px; height: 2px; background: #ddd; margin: 3px 0; }
+.menu-btn span { display: block; width: 18px; height: 2px; background: #ddd; margin: 3px 0; transition: transform .2s ease, opacity .2s ease, background .2s ease; }
+.menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.menu-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+.menu-btn:hover { background:#1a1a1a; border-color:#3a3a3a; }
 
 .mobile-menu { display: none; }
 @media (max-width: 900px){
@@ -239,9 +281,25 @@ a { color: inherit; text-decoration: none; }
 .share-btn {
   padding: 8px 12px; border: 1px solid #2a2a2a; background: #111; color: #ddd;
   border-radius: 8px; text-decoration: none; cursor: pointer;
-  transition: background .15s ease, color .15s ease, border-color .15s ease; font-size: 14px;
+  transition: background .15s ease, color .15s ease, border-color .15s ease, transform .15s ease, box-shadow .15s ease; font-size: 14px;
 }
-.share-btn:hover { background:#1a1a1a; color:#fff; border-color:#3a3a3a; }
+.share-btn:hover { background:#1a1a1a; color:#fff; border-color:#3a3a3a; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,.25); }
+
+/* Etats :active harmonisés */
+.menu-btn:active,
+.share-btn:active,
+.chip-btn:active {
+  transform: translateY(1px);
+}
+
+.recent-link:active {
+  transform: scale(0.995);
+}
+
+.navlink:active,
+.article-nav .nav-btn:active {
+  opacity: .85;
+}
 
 /* Bouton "Retour en haut" */
 .backtotop {
@@ -359,6 +417,11 @@ a { color: inherit; text-decoration: none; }
   padding: 8px; 
   border-radius: 12px; 
   text-decoration: none; 
+  transition: background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+@media (hover: hover){
+  .recent-link:hover { background:#121212; border-color:#2a2a2a; box-shadow: 0 6px 16px rgba(0,0,0,.25); }
 }
 
 .recent-thumb {
@@ -413,4 +476,3 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(to top, rgba(0,0,0,.35), transparent 60%);
   pointer-events: none;
 }
-
