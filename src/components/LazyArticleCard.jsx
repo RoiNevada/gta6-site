@@ -12,7 +12,7 @@ export default function LazyArticleCard(props) {
         setVisible(true);
         observer.disconnect();
       }
-    });
+    }, { root: null, rootMargin: "200px", threshold: 0.01 });
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);

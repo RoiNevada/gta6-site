@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { formatDate } from "../utils/formatDate";
+import { prefetchArticlePage } from "../utils/prefetch";
 
 export default function ArticleCard({ a }) {
   return (
@@ -12,10 +13,20 @@ export default function ArticleCard({ a }) {
       whileHover={{ y: -2 }}
       transition={{ duration: 0.18 }}
     >
-      <Link to={`/article/${a.slug}`} className="card-link" aria-label={a.title}>
+      <Link
+        to={`/article/${a.slug}`}
+        className="card-link"
+        aria-label={a.title}
+        onMouseEnter={prefetchArticlePage}
+        onFocus={prefetchArticlePage}
+      >
         {/* Image + date en overlay */}
         <div className="card-cover">
-          {a.cover ? <img src={a.cover} alt="" loading="lazy" /> : <div aria-hidden="true" />}
+          {a.cover ? (
+            <img src={a.cover} alt="" loading="lazy" decoding="async" fetchpriority="low" />
+          ) : (
+            <div aria-hidden="true" />
+          )}
           <time
             className="cover-date"
             dateTime={a.date}

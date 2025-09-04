@@ -1,11 +1,12 @@
 // src/App.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Routes, Route, NavLink, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion as Motion } from "framer-motion";
-import HomePage from "./pages/HomePage";
-import ArticlePage from "./pages/ArticlePage";
-import NotFound from "./pages/NotFound";
+const HomePage = lazy(() => import("./pages/HomePage.jsx"));
+const ArticlePage = lazy(() => import("./pages/ArticlePage.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 import ScrollToTop from "./components/ScrollToTop";
+import ScrollProgress from "./components/ScrollProgress";
 import PageFade from "./components/PageFade";
 import BackToTop from "./components/BackToTop";
 
@@ -69,6 +70,9 @@ export default function App() {
         </button>
       </Motion.nav>
 
+      {/* Barre de progression de lecture (globale via portal) */}
+      <ScrollProgress />
+
       {/* Menu mobile déroulant */}
       <AnimatePresence>
         {menuOpen && (
@@ -89,11 +93,13 @@ export default function App() {
 
       {/* Transitions entre pages */}
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname + location.search}>
-          <Route path="/" element={<PageFade><HomePage /></PageFade>} />
-          <Route path="/article/:slug" element={<PageFade><ArticlePage /></PageFade>} />
-          <Route path="*" element={<PageFade><NotFound /></PageFade>} />
-        </Routes>
+        <Suspense fallback={null}>
+          <Routes location={location} key={location.pathname + location.search}>
+            <Route path="/" element={<PageFade><HomePage /></PageFade>} />
+            <Route path="/article/:slug" element={<PageFade><ArticlePage /></PageFade>} />
+            <Route path="*" element={<PageFade><NotFound /></PageFade>} />
+          </Routes>
+        </Suspense>
       </AnimatePresence>
 
       <BackToTop />

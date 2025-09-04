@@ -34,30 +34,55 @@ export default function Seo({
   description = "Cartes, missions, personnages, astuces et actualités de GTA 6.",
   url,
   image = "/images/vicecity.jpg",
+  type = "website",
+  locale = "fr_FR",
+  twitterSite,
+  twitterCreator,
+  noindex = false,
 }) {
   useEffect(() => {
     const desc = clampDesc(description);
+    const canonical = url || (typeof window !== "undefined" ? window.location.href : undefined);
 
     // Title
     if (title) document.title = title;
 
     // Meta description
     upsertMetaByName("description", desc);
+    if (noindex) {
+      upsertMetaByName("robots", "noindex, nofollow");
+    } else {
+      upsertMetaByName("robots", "index, follow");
+    }
 
     // Open Graph
     upsertMetaByProperty("og:site_name", "GTA 6 Guides");
-    upsertMetaByProperty("og:type", "website");
+    upsertMetaByProperty("og:type", type || "website");
     upsertMetaByProperty("og:title", title);
     upsertMetaByProperty("og:description", desc);
-    upsertMetaByProperty("og:url", url || window.location.href);
+    upsertMetaByProperty("og:url", canonical || "");
     upsertMetaByProperty("og:image", image);
+    upsertMetaByProperty("og:locale", locale);
 
     // Twitter
     upsertMetaByName("twitter:card", "summary_large_image");
     upsertMetaByName("twitter:title", title);
     upsertMetaByName("twitter:description", desc);
     upsertMetaByName("twitter:image", image);
-  }, [title, description, url, image]);
+    if (twitterSite) upsertMetaByName("twitter:site", twitterSite);
+    if (twitterCreator) upsertMetaByName("twitter:creator", twitterCreator);
+
+    // Canonical link
+    if (canonical) {
+      let link = document.head.querySelector('link[rel="canonical"]');
+      if (!link) {
+        link = document.createElement("link");
+        link.setAttribute("rel", "canonical");
+        document.head.appendChild(link);
+      }
+      link.setAttribute("href", canonical);
+    }
+  }, [title, description, url, image, type, locale, twitterSite, twitterCreator, noindex]);
 
   return null; // rien à rendre
 }

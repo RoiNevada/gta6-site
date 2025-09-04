@@ -50,3 +50,13 @@ fs.writeFileSync(outPath, xml, "utf8");
 console.log(`✅ Sitemap généré : ${outPath}`);
 console.log(`   URLs incluses : ${urls.length}`);
 console.log(`   Domaine : ${SITE_URL}`);
+
+// 6) Met à jour robots.txt avec le bon Sitemap
+try {
+  const robotsPath = path.join(root, "public", "robots.txt");
+  const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+  fs.writeFileSync(robotsPath, robots, "utf8");
+  console.log(`✅ robots.txt mis à jour : ${robotsPath}`);
+} catch (e) {
+  console.warn("⚠️ Impossible de mettre à jour robots.txt:", e.message);
+}

@@ -1,24 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 export default function ScrollProgress() {
   const [p, setP] = useState(0);
+  const raf = useRef(null);
+  const pending = useRef(false);
 
   useEffect(() => {
-    const onScroll = () => {
+    const measure = () => {
       const h = document.documentElement;
-      const scrollTop = h.scrollTop || document.body.scrollTop;
-      const height = h.scrollHeight - h.clientHeight;
+      const b = document.body;
+      const scrollTop = window.pageYOffset || h.scrollTop || b.scrollTop || 0;
+      const scrollHeight = Math.max(b.scrollHeight, h.scrollHeight);
+      const clientHeight = h.clientHeight;
+      const height = Math.max(0, scrollHeight - clientHeight);
       const percent = height > 0 ? (scrollTop / height) * 100 : 0;
       setP(percent);
+      pending.current = false;
+      raf.current = null;
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+
+    const requestMeasure = () => {
+      if (pending.current) return;
+      pending.current = true;
+      raf.current = window.requestAnimationFrame(measure);
+    };
+
+    requestMeasure();
+    window.addEventListener("scroll", requestMeasure, { passive: true });
+    window.addEventListener("resize", requestMeasure);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("scroll", requestMeasure);
+      window.removeEventListener("resize", requestMeasure);
+      if (raf.current) cancelAnimationFrame(raf.current);
     };
   }, []);
 
-  return <div className="read-progress" style={{ width: `${p}%` }} />;
+  // Render into body to avoid stacking context/transform issues
+  return createPortal(
+    <div className="read-progress" style={{ width: `${p}%` }} />,
+    document.body
+  );
 }

@@ -11,6 +11,7 @@ import Countdown from "../components/Countdown";
 
 export default function HomePage() {
   const [q, setQ] = useState("");
+  const [inputQ, setInputQ] = useState("");
   const [cat, setCat] = useState("Tous");
   const [params, setSearchParams] = useSearchParams();
 
@@ -19,6 +20,12 @@ export default function HomePage() {
     const fromUrl = params.get("cat");
     setCat(fromUrl || "Tous");
   }, [params]);
+
+  // Debounce recherche pour limiter les re-renders
+  useEffect(() => {
+    const id = setTimeout(() => setQ(inputQ), 150);
+    return () => clearTimeout(id);
+  }, [inputQ]);
 
   // Écrit ?cat= dans l'URL quand on clique une puce
   function selectCat(c) {
@@ -96,8 +103,8 @@ export default function HomePage() {
             </div>
 
             <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
+              value={inputQ}
+              onChange={(e) => setInputQ(e.target.value)}
               placeholder="Rechercher…"
               className="search"
               aria-label="Rechercher"

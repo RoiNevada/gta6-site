@@ -4,11 +4,11 @@ import { articles } from "../data/articles";
 import { renderMD } from "../utils/md";
 import { formatDate } from "../utils/formatDate";
 import { readTime } from "../utils/readTime";
-import ScrollProgress from "../components/ScrollProgress";
 import LazyArticleCard from "../components/LazyArticleCard";
 import LazyImage from "../components/LazyImage";
 import Seo from "../components/Seo";
 import ShareBar from "../components/ShareBar";
+import { prefetchArticlePage, prefetchHomePage } from "../utils/prefetch";
 
 export default function ArticlePage() {
   const { slug } = useParams();
@@ -54,11 +54,49 @@ export default function ArticlePage() {
         description={a.excerpt || "Article GTA 6"}
         url={canonicalUrl}
         image={a.cover || "/images/vicecity.jpg"}
+        type="article"
       />
 
-      <ScrollProgress />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": canonicalUrl
+            },
+            "headline": a.title,
+            "description": a.excerpt || "",
+            "image": a.cover ? [a.cover] : undefined,
+            "datePublished": a.date,
+            "dateModified": a.date,
+            "author": { "@type": "Organization", "name": "GTA 6 Guides" },
+            "publisher": {
+              "@type": "Organization",
+              "name": "GTA 6 Guides",
+              "logo": { "@type": "ImageObject", "url": "/images/logo.png" }
+            }
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Accueil", "item": typeof window !== 'undefined' ? window.location.origin + '/' : 'https://example.com/' },
+              { "@type": "ListItem", "position": 2, "name": a.category },
+              { "@type": "ListItem", "position": 3, "name": a.title, "item": canonicalUrl }
+            ]
+          })
+        }}
+      />
       <div className="container article">
-        <Link to="/" className="link">← Accueil</Link>
+        <Link to="/" className="link" onMouseEnter={prefetchHomePage} onFocus={prefetchHomePage}>← Accueil</Link>
         <h1>{a.title}</h1>
         <p className="muted">
           {a.category} • {formatDate(a.date)} • {readTime(a.content)}
@@ -67,7 +105,17 @@ export default function ArticlePage() {
         {/* Barre de partage */}
         <ShareBar title={a.title} url={canonicalUrl} />
 
-        {a.cover && <LazyImage className="cover" src={a.cover} alt={a.title} />}
+        {/* Sommaire retiré temporairement */}
+
+        {a.cover && (
+          <LazyImage
+            className="cover"
+            src={a.cover}
+            alt={a.title}
+            eager
+            fetchpriority="high"
+          />
+        )}
 
         <div
           className="content"
@@ -89,17 +137,17 @@ export default function ArticlePage() {
         {/* Navigation bas d’article */}
         <div className="article-nav">
           {prev ? (
-            <Link to={`/article/${prev.slug}`} className="nav-btn prev">
+            <Link to={`/article/${prev.slug}`} className="nav-btn prev" onMouseEnter={prefetchArticlePage} onFocus={prefetchArticlePage}>
               ← {prev.title}
             </Link>
           ) : (
             <span />
           )}
 
-          <Link to="/" className="nav-btn">← Tous les articles</Link>
+          <Link to="/" className="nav-btn" onMouseEnter={prefetchHomePage} onFocus={prefetchHomePage}>← Tous les articles</Link>
 
           {next ? (
-            <Link to={`/article/${next.slug}`} className="nav-btn next">
+            <Link to={`/article/${next.slug}`} className="nav-btn next" onMouseEnter={prefetchArticlePage} onFocus={prefetchArticlePage}>
               {next.title} →
             </Link>
           ) : (
