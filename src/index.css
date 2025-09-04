@@ -145,8 +145,12 @@ a { color: inherit; text-decoration: none; }
 
 /* Articles récents */
 .recent { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
-.recent a { color: #ddd; }
-.recent a:hover { color: #fff; }
+.recent-item { display: flex; align-items: center; gap: 12px; color: #ddd; }
+.recent-item:hover { color: #fff; }
+.recent-thumb { width: 80px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+.recent-thumb > div { height: 100%; }
+.recent-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; display: block; }
+.recent-item:hover .recent-thumb img { transform: scale(1.1); }
 
 /* Page article */
 .article .cover { width: 100%; border-radius: 12px; border: 1px solid #222; margin: 8px 0 16px; }

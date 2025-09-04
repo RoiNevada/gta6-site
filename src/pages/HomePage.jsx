@@ -119,10 +119,17 @@ export default function HomePage() {
             <ul className="recent">
               {recents.map((a) => (
                 <li key={a.id}>
-                  <Link to={`/article/${a.slug}`}>{a.title}</Link>
-                  <div className="muted" style={{ fontSize: 12 }}>
-                    {a.category}
-                  </div>
+                  <Link to={`/article/${a.slug}`} className="recent-item">
+                    <div className="recent-thumb">
+                      <LazyImage src={a.cover} alt="" />
+                    </div>
+                    <div className="recent-content">
+                      <span className="recent-title">{a.title}</span>
+                      <div className="muted" style={{ fontSize: 12 }}>
+                        {a.category}
+                      </div>
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>
