@@ -1,22 +1,26 @@
+// src/pages/HomePage.jsx
 import { useMemo, useState, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
+
 import LazyArticleCard from "../components/LazyArticleCard";
+import RecentItem from "../components/RecentItem";
 import { articles } from "../data/articles";
 import Seo from "../components/Seo";
 import Countdown from "../components/Countdown";
-import LazyImage from "../components/LazyImage";
 
 export default function HomePage() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("Tous");
   const [params, setSearchParams] = useSearchParams();
 
+  // Lis ?cat= depuis l'URL (ex: /?cat=Gameplay)
   useEffect(() => {
     const fromUrl = params.get("cat");
     setCat(fromUrl || "Tous");
   }, [params]);
 
+  // Écrit ?cat= dans l'URL quand on clique une puce
   function selectCat(c) {
     setCat(c);
     if (c === "Tous") {
@@ -35,14 +39,15 @@ export default function HomePage() {
 
   const filtered = articles.filter((a) => {
     const catOk = cat === "Tous" || a.category === cat;
-    const qOk = (a.title + " " + a.excerpt)
-      .toLowerCase()
-      .includes(q.toLowerCase());
+    const qOk = (a.title + " " + a.excerpt).toLowerCase().includes(q.toLowerCase());
     return catOk && qOk;
   });
 
   const recents = useMemo(
-    () => [...articles].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5),
+    () =>
+      [...articles]
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 5),
     []
   );
 
@@ -51,7 +56,11 @@ export default function HomePage() {
       <Seo
         title="GTA 6 – Guides & Actus"
         description="Cartes, missions, personnages, astuces. Tout au même endroit."
-        url={typeof window !== "undefined" ? window.location.origin + "/" : "https://example.com/"}
+        url={
+          typeof window !== "undefined"
+            ? window.location.origin + "/"
+            : "https://example.com/"
+        }
         image="/images/vicecity.jpg"
       />
 
@@ -104,33 +113,22 @@ export default function HomePage() {
 
         {/* Sidebar */}
         <aside className="sidebar">
-          {/* ✅ Panneau dédié au compte à rebours */}
+          {/* Compte à rebours */}
           <div className="panel">
             <h3>Compte à rebours</h3>
             <Countdown
+              // Mets la date officielle ici
               target="2026-05-26T00:00:00-04:00"
               title="Sortie officielle GTA 6"
             />
           </div>
 
-          {/* Panneau “Articles récents” séparé */}
+          {/* Articles récents (miniatures avec zoom) */}
           <div className="panel">
             <h3>Articles récents</h3>
             <ul className="recent">
               {recents.map((a) => (
-                <li key={a.id}>
-                  <Link to={`/article/${a.slug}`} className="recent-item">
-                    <div className="recent-thumb">
-                      <LazyImage src={a.cover} alt="" />
-                    </div>
-                    <div className="recent-content">
-                      <span className="recent-title">{a.title}</span>
-                      <div className="muted" style={{ fontSize: 12 }}>
-                        {a.category}
-                      </div>
-                    </div>
-                  </Link>
-                </li>
+                <RecentItem key={a.id} a={a} />
               ))}
             </ul>
           </div>

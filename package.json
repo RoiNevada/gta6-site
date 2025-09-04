@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
+    "prebuild": "node ./scripts/generate-sitemap.mjs",
     "preview": "vite preview",
-    "sitemap": "SITE_URL=https://ton-domaine.com node scripts/generate-sitemap.mjs"
+    "lint": "eslint .",
+    "sitemap": "SITE_URL=http://localhost:5173 node ./scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "dompurify": "^3.2.6",
