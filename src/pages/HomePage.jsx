@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
-import ArticleCard from "../components/ArticleCard";
+import LazyArticleCard from "../components/LazyArticleCard";
 import { articles } from "../data/articles";
 import Seo from "../components/Seo";
 import Countdown from "../components/Countdown";
@@ -96,7 +96,7 @@ export default function HomePage() {
 
           <div className="grid">
             {filtered.map((a, i) => (
-              <ArticleCard key={a.id} a={a} i={i} />
+              <LazyArticleCard key={a.id} a={a} i={i} />
             ))}
           </div>
         </div>
