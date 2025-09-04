@@ -5,6 +5,7 @@ import LazyArticleCard from "../components/LazyArticleCard";
 import { articles } from "../data/articles";
 import Seo from "../components/Seo";
 import Countdown from "../components/Countdown";
+import LazyImage from "../components/LazyImage";
 
 export default function HomePage() {
   const [q, setQ] = useState("");
