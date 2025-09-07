@@ -34,6 +34,7 @@ export default function App() {
 
   return (
     <div className="site">
+      <ScrollProgress />
       <ScrollToTop />
 
       <Motion.nav
@@ -69,9 +70,6 @@ export default function App() {
           <span />
         </button>
       </Motion.nav>
-
-      {/* Barre de progression de lecture (globale via portal) */}
-      <ScrollProgress />
 
       {/* Menu mobile déroulant */}
       <AnimatePresence>

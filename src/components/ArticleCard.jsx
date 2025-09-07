@@ -1,9 +1,10 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { formatDate } from "../utils/formatDate";
 import { prefetchArticlePage } from "../utils/prefetch";
 
-export default function ArticleCard({ a }) {
+function ArticleCard({ a }) {
   return (
     <Motion.article
       layout
@@ -46,3 +47,5 @@ export default function ArticleCard({ a }) {
     </Motion.article>
   );
 }
+
+export default memo(ArticleCard);

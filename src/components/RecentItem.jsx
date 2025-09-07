@@ -1,8 +1,9 @@
 // src/components/RecentItem.jsx
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { prefetchArticlePage } from "../utils/prefetch";
 
-export default function RecentItem({ a }) {
+function RecentItem({ a }) {
   return (
     <li className="recent-item">
       <Link
@@ -27,3 +28,5 @@ export default function RecentItem({ a }) {
     </li>
   );
 }
+
+export default memo(RecentItem);

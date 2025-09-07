@@ -1,44 +1,60 @@
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+// src/components/ScrollProgress.jsx
+import { useEffect, useState, useRef } from "react";
 
 export default function ScrollProgress() {
-  const [p, setP] = useState(0);
-  const raf = useRef(null);
-  const pending = useRef(false);
+  const [width, setWidth] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const rafRef = useRef(0);
 
   useEffect(() => {
-    const measure = () => {
-      const h = document.documentElement;
-      const b = document.body;
-      const scrollTop = window.pageYOffset || h.scrollTop || b.scrollTop || 0;
-      const scrollHeight = Math.max(b.scrollHeight, h.scrollHeight);
-      const clientHeight = h.clientHeight;
-      const height = Math.max(0, scrollHeight - clientHeight);
-      const percent = height > 0 ? (scrollTop / height) * 100 : 0;
-      setP(percent);
-      pending.current = false;
-      raf.current = null;
+    const root =
+      document.scrollingElement ||
+      document.documentElement ||
+      document.body;
+
+    const compute = () => {
+      // position courante (ok Safari/Chrome/Firefox)
+      const y =
+        window.scrollY ??
+        window.pageYOffset ??
+        root.scrollTop ??
+        0;
+
+      const max = (root.scrollHeight || 0) - (root.clientHeight || 0);
+
+      if (max <= 0) {
+        setWidth(0);
+        setVisible(false);
+        return;
+      }
+      const pct = Math.min(100, Math.max(0, (y / max) * 100));
+      setWidth(pct);
+      setVisible(true);
     };
 
-    const requestMeasure = () => {
-      if (pending.current) return;
-      pending.current = true;
-      raf.current = window.requestAnimationFrame(measure);
+    const onScrollOrResize = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(compute);
     };
 
-    requestMeasure();
-    window.addEventListener("scroll", requestMeasure, { passive: true });
-    window.addEventListener("resize", requestMeasure);
+    compute(); // init
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize);
     return () => {
-      window.removeEventListener("scroll", requestMeasure);
-      window.removeEventListener("resize", requestMeasure);
-      if (raf.current) cancelAnimationFrame(raf.current);
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
     };
   }, []);
 
-  // Render into body to avoid stacking context/transform issues
-  return createPortal(
-    <div className="read-progress" style={{ width: `${p}%` }} />,
-    document.body
+  return (
+    <div
+      className="read-progress"
+      style={{
+        width: `${width}%`,
+        opacity: visible ? 1 : 0,
+      }}
+      aria-hidden="true"
+    />
   );
 }
