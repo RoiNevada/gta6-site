@@ -52,8 +52,7 @@ export default function ArticlePage() {
       <Seo
         title={`${a.title} – GTA 6 Guides`}
         description={a.excerpt || "Article GTA 6"}
-        url={canonicalUrl}
-        canonical={canonicalUrl}
+        canonical={`/article/${a.slug}`}
         image={a.cover || "/images/vicecity.jpg"}
         type="article"
         datePublished={a.date}
