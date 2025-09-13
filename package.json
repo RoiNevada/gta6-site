@@ -9,8 +9,8 @@
     "prebuild": "node ./scripts/generate-sitemap.mjs && node ./scripts/generate-rss.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
-    "sitemap": "SITE_URL=https://gta6-site.vercel.app node ./scripts/generate-sitemap.mjs",
-    "rss": "SITE_URL=https://gta6-site.vercel.app node ./scripts/generate-rss.mjs",
+    "sitemap": "SITE_URL=https://www.gta6-actus.com node ./scripts/generate-sitemap.mjs",
+    "rss": "SITE_URL=https://www.gta6-actus.com node ./scripts/generate-rss.mjs",
     "build:seo": "npm run sitemap && npm run rss",
     "push": "git add . && git commit -m 'update' && git push origin main"
   },

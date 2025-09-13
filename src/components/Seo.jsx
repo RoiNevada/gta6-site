@@ -1,14 +1,15 @@
 /*
   Modifs SEO pour domaine personnalisé (gta6-actus.com)
-  - Canonique dynamique par page : si `canonical` est fourni (ex. "/article/slug"), on le résout en URL absolue avec ton domaine.
-    Sinon on utilise l'URL courante, normalisée sur https://www.gta6-actus.com.
+  - Canonique dynamique par page : si `canonical` est fourni (ex. "/article/slug"),
+    on le résout en URL absolue avec ton domaine. Sinon on utilise l'URL courante,
+    normalisée sur https://www.gta6-actus.com.
   - og:url aligné sur la canonique finale.
   - Image OG/Twitter résolue en absolu.
   - On retire twitter:url (pas standard), on garde twitter:card/title/description/image.
 */
 import { useEffect } from "react";
 
-const SITE_ORIGIN = "https://www.gta6-actus.com"; // ton domaine custom
+const SITE_ORIGIN = "https://www.gta6-actus.com";
 
 function clampDesc(str = "", max = 160) {
   const s = (str || "").replace(/\s+/g, " ").trim();
@@ -39,17 +40,14 @@ function upsertMetaByProperty(prop, content) {
   el.setAttribute("content", content ?? "");
 }
 
-// Normalise une URL (absolue) sur le domaine custom
+// Normalise une URL absolue sur le domaine custom
 function normalizeAbsoluteUrl(input) {
   if (!input) return SITE_ORIGIN + "/";
   try {
-    // si input est déjà absolu, on remplace juste l'origine par ton domaine
     const u = new URL(input, SITE_ORIGIN);
-    // force l'origine sur le domaine custom
     return SITE_ORIGIN + u.pathname + (u.search || "") + (u.hash || "");
   } catch {
-    // input relatif (ex: "/article/slug")
-    return SITE_ORIGIN + (input.startsWith("/") ? input : `/${input}`);
+    return SITE_ORIGIN + (String(input).startsWith("/") ? input : `/${input}`);
   }
 }
 
@@ -63,22 +61,21 @@ function resolveImage(src) {
 export default function Seo({
   title = "GTA 6 – Guides & Actus",
   description = "Cartes, missions, personnages, astuces et actualités de GTA 6.",
-  // `url` devient optionnel. S'il est fourni, on le normalise ; sinon on prend l'URL courante.
-  url,
+  url,                          // optionnel : si fourni, sera normalisé
   image = "/images/vicecity.jpg",
-  type = "website",           // "website" ou "article"
+  type = "website",            // "website" ou "article"
   locale = "fr_FR",
-  twitterSite,                // ex: "@toncompte"
-  twitterCreator,             // ex: "@auteur"
+  twitterSite,                 // ex: "@toncompte"
+  twitterCreator,              // ex: "@auteur"
   noindex = false,
-  canonical,                  // ex: "/article/mon-slug" (recommandé sur ArticlePage)
+  canonical,                   // ex: "/article/mon-slug"
   datePublished,
   dateModified,
 }) {
   useEffect(() => {
     const desc = clampDesc(description);
 
-    // Canonique : priorité à `canonical` (relatif ou absolu), sinon `url`, sinon URL courante
+    // Canonique : priorité à `canonical`, sinon `url`, sinon URL courante
     let finalCanonical = canonical
       ? normalizeAbsoluteUrl(canonical)
       : url
@@ -170,7 +167,7 @@ export default function Seo({
     noindex,
     canonical,
     datePublished,
-    dateModified,
+    dateModified
   ]);
 
   return null;
