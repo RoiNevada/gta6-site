@@ -2,14 +2,14 @@
 <rss version="2.0">
   <channel>
     <title>GTA 6 Guides</title>
-    <link>http://localhost:5173/</link>
+    <link>https://gta6-site.vercel.app/</link>
     <description>Guides et actualités GTA 6</description>
     <language>fr</language>
 
   <item>
     <title>5 astuces pour gagner de l’argent rapidement dans GTA 6</title>
-    <link>http://localhost:5173/article/gta-6-astuces-argent</link>
-    <guid>http://localhost:5173/article/gta-6-astuces-argent</guid>
+    <link>https://gta6-site.vercel.app/article/gta-6-astuces-argent</link>
+    <guid>https://gta6-site.vercel.app/article/gta-6-astuces-argent</guid>
     <pubDate>Sat, 30 Aug 2025 00:00:00 GMT</pubDate>
     <description>Besoin de cash vite ? Voici 5 méthodes simples pour booster ton compte.</description>
   </item>
@@ -17,8 +17,8 @@
 
   <item>
     <title>GTA 6 : tout ce qu’on sait de la carte (Vice City)</title>
-    <link>http://localhost:5173/article/gta-6-carte-vice-city</link>
-    <guid>http://localhost:5173/article/gta-6-carte-vice-city</guid>
+    <link>https://gta6-site.vercel.app/article/gta-6-carte-vice-city</link>
+    <guid>https://gta6-site.vercel.app/article/gta-6-carte-vice-city</guid>
     <pubDate>Fri, 29 Aug 2025 00:00:00 GMT</pubDate>
     <description>Vice City confirmée, zones attendues et indices du trailer.</description>
   </item>
@@ -26,8 +26,8 @@
 
   <item>
     <title>Lucia &amp; Jason : duo explosif de GTA 6</title>
-    <link>http://localhost:5173/article/lucia-et-jason-gta-6</link>
-    <guid>http://localhost:5173/article/lucia-et-jason-gta-6</guid>
+    <link>https://gta6-site.vercel.app/article/lucia-et-jason-gta-6</link>
+    <guid>https://gta6-site.vercel.app/article/lucia-et-jason-gta-6</guid>
     <pubDate>Fri, 29 Aug 2025 00:00:00 GMT</pubDate>
     <description>Premier duo jouable de la saga, dynamique à la Bonnie &amp; Clyde.</description>
   </item>
@@ -35,8 +35,8 @@
 
   <item>
     <title>Gameplay de GTA 6 : IA et physique redéfinies</title>
-    <link>http://localhost:5173/article/gta-6-gameplay-innovations</link>
-    <guid>http://localhost:5173/article/gta-6-gameplay-innovations</guid>
+    <link>https://gta6-site.vercel.app/article/gta-6-gameplay-innovations</link>
+    <guid>https://gta6-site.vercel.app/article/gta-6-gameplay-innovations</guid>
     <pubDate>Fri, 29 Aug 2025 00:00:00 GMT</pubDate>
     <description>Animations, conduite, et comportements des PNJ montent d’un cran.</description>
   </item>
@@ -44,8 +44,8 @@
 
   <item>
     <title>Bien démarrer : les missions du prologue</title>
-    <link>http://localhost:5173/article/gta-6-missions-depart</link>
-    <guid>http://localhost:5173/article/gta-6-missions-depart</guid>
+    <link>https://gta6-site.vercel.app/article/gta-6-missions-depart</link>
+    <guid>https://gta6-site.vercel.app/article/gta-6-missions-depart</guid>
     <pubDate>Fri, 29 Aug 2025 00:00:00 GMT</pubDate>
     <description>Conseils rapides pour réussir les premières missions sans galérer.</description>
   </item>
@@ -53,8 +53,8 @@
 
   <item>
     <title>GTA Online (VI) : 10 conseils pour bien commencer</title>
-    <link>http://localhost:5173/article/gta-6-online-conseils</link>
-    <guid>http://localhost:5173/article/gta-6-online-conseils</guid>
+    <link>https://gta6-site.vercel.app/article/gta-6-online-conseils</link>
+    <guid>https://gta6-site.vercel.app/article/gta-6-online-conseils</guid>
     <pubDate>Fri, 29 Aug 2025 00:00:00 GMT</pubDate>
     <description>Argent, véhicules, business : les priorités pour ne pas perdre de temps.</description>
   </item>
