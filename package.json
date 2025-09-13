@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "sitemap": "SITE_URL=https://www.gta6-actus.com node ./scripts/generate-sitemap.mjs",
     "rss": "SITE_URL=https://www.gta6-actus.com node ./scripts/generate-rss.mjs",
-    "build:seo": "npm run sitemap && npm run rss",
+    "favicons": "node ./scripts/copy-favicons.mjs",
+    "build:seo": "npm run sitemap && npm run rss && npm run favicons",
     "push": "git add . && git commit -m 'update' && git push origin main"
   },
   "dependencies": {

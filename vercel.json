@@ -1,6 +1,27 @@
 {
   "headers": [
     {
+      "source": "/favicon.ico",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, s-maxage=0, must-revalidate"},
+        {"key":"Content-Type","value":"image/x-icon"}
+      ]
+    },
+    {
+      "source": "/favicon.png",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, s-maxage=0, must-revalidate"},
+        {"key":"Content-Type","value":"image/png"}
+      ]
+    },
+    {
+      "source": "/apple-touch-icon.png",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, s-maxage=0, must-revalidate"},
+        {"key":"Content-Type","value":"image/png"}
+      ]
+    },
+    {
       "source": "/images/logo.png",
       "headers": [
         {"key":"Cache-Control","value":"public, max-age=0, s-maxage=0, must-revalidate"}
@@ -34,6 +55,9 @@
     }
   ],
   "rewrites": [
+    { "source": "/favicon.png", "destination": "/images/favicon.png" },
+    { "source": "/favicon.ico", "destination": "/images/favicon.png" },
+    { "source": "/apple-touch-icon.png", "destination": "/images/favicon.png" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
