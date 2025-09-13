@@ -63,16 +63,7 @@ export default function HomePage() {
       <Seo
         title="GTA 6 – Guides & Actus"
         description="Cartes, missions, personnages, astuces. Tout au même endroit."
-        url={
-          typeof window !== "undefined"
-            ? window.location.origin + "/"
-            : "https://example.com/"
-        }
-        canonical={
-          typeof window !== "undefined"
-            ? window.location.origin + "/"
-            : "https://example.com/"
-        }
+        canonical="/"
         image="/images/vicecity.jpg"
       />
 

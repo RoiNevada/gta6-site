@@ -1,6 +1,18 @@
 {
   "headers": [
     {
+      "source": "/images/logo.png",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, s-maxage=0, must-revalidate"}
+      ]
+    },
+    {
+      "source": "/images/favicon.png",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, s-maxage=0, must-revalidate"}
+      ]
+    },
+    {
       "source": "/sitemap.xml",
       "headers": [
         {"key":"Cache-Control","value":"public, max-age=0, s-maxage=3600"},

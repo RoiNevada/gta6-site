@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "sitemap": "SITE_URL=https://gta6-site.vercel.app node ./scripts/generate-sitemap.mjs",
     "rss": "SITE_URL=https://gta6-site.vercel.app node ./scripts/generate-rss.mjs",
-    "build:seo": "npm run sitemap && npm run rss"
+    "build:seo": "npm run sitemap && npm run rss",
+    "push": "git add . && git commit -m 'update' && git push origin main"
   },
   "dependencies": {
     "dompurify": "^3.2.6",

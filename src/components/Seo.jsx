@@ -1,11 +1,21 @@
+/*
+  Modifs SEO pour domaine personnalisé (gta6-actus.com)
+  - Canonique dynamique par page : si `canonical` est fourni (ex. "/article/slug"), on le résout en URL absolue avec ton domaine.
+    Sinon on utilise l'URL courante, normalisée sur https://www.gta6-actus.com.
+  - og:url aligné sur la canonique finale.
+  - Image OG/Twitter résolue en absolu.
+  - On retire twitter:url (pas standard), on garde twitter:card/title/description/image.
+*/
 import { useEffect } from "react";
+
+const SITE_ORIGIN = "https://www.gta6-actus.com"; // ton domaine custom
 
 function clampDesc(str = "", max = 160) {
   const s = (str || "").replace(/\s+/g, " ").trim();
   return s.length > max ? s.slice(0, max - 1) + "…" : s;
 }
 
-// util: crée/maj une meta par "name"
+// Crée/maj <meta name="...">
 function upsertMetaByName(name, content) {
   if (!name) return;
   let el = document.head.querySelector(`meta[name="${name}"]`);
@@ -17,7 +27,7 @@ function upsertMetaByName(name, content) {
   el.setAttribute("content", content ?? "");
 }
 
-// util: crée/maj une meta par "property" (Open Graph)
+// Crée/maj <meta property="..."> (Open Graph)
 function upsertMetaByProperty(prop, content) {
   if (!prop) return;
   let el = document.head.querySelector(`meta[property="${prop}"]`);
@@ -29,30 +39,60 @@ function upsertMetaByProperty(prop, content) {
   el.setAttribute("content", content ?? "");
 }
 
+// Normalise une URL (absolue) sur le domaine custom
+function normalizeAbsoluteUrl(input) {
+  if (!input) return SITE_ORIGIN + "/";
+  try {
+    // si input est déjà absolu, on remplace juste l'origine par ton domaine
+    const u = new URL(input, SITE_ORIGIN);
+    // force l'origine sur le domaine custom
+    return SITE_ORIGIN + u.pathname + (u.search || "") + (u.hash || "");
+  } catch {
+    // input relatif (ex: "/article/slug")
+    return SITE_ORIGIN + (input.startsWith("/") ? input : `/${input}`);
+  }
+}
+
+// Résout l'image en absolu sur le domaine custom
+function resolveImage(src) {
+  if (!src) return "";
+  if (/^https?:\/\//i.test(src)) return src;
+  return SITE_ORIGIN + (src.startsWith("/") ? src : `/${src}`);
+}
+
 export default function Seo({
   title = "GTA 6 – Guides & Actus",
   description = "Cartes, missions, personnages, astuces et actualités de GTA 6.",
+  // `url` devient optionnel. S'il est fourni, on le normalise ; sinon on prend l'URL courante.
   url,
   image = "/images/vicecity.jpg",
-  type = "website",
+  type = "website",           // "website" ou "article"
   locale = "fr_FR",
-  twitterSite,
-  twitterCreator,
+  twitterSite,                // ex: "@toncompte"
+  twitterCreator,             // ex: "@auteur"
   noindex = false,
-  canonical,
+  canonical,                  // ex: "/article/mon-slug" (recommandé sur ArticlePage)
   datePublished,
   dateModified,
 }) {
   useEffect(() => {
     const desc = clampDesc(description);
-    const runtimeOrigin = typeof window !== "undefined" ? window.location.origin : "";
-    const resolvedCanonical = (canonical || url) || (typeof window !== "undefined" ? window.location.href : undefined);
-    const resolvedImage = image?.startsWith("http") ? image : (runtimeOrigin && image ? runtimeOrigin + image : image);
+
+    // Canonique : priorité à `canonical` (relatif ou absolu), sinon `url`, sinon URL courante
+    let finalCanonical = canonical
+      ? normalizeAbsoluteUrl(canonical)
+      : url
+      ? normalizeAbsoluteUrl(url)
+      : (typeof window !== "undefined"
+          ? normalizeAbsoluteUrl(window.location.href)
+          : SITE_ORIGIN + "/");
+
+    const resolvedImage = resolveImage(image);
 
     // Title
     if (title) document.title = title;
 
-    // Meta description
+    // Meta de base
     upsertMetaByName("description", desc);
     upsertMetaByName("robots", noindex ? "noindex,follow" : "index,follow");
 
@@ -61,30 +101,30 @@ export default function Seo({
     upsertMetaByProperty("og:type", type || "website");
     upsertMetaByProperty("og:title", title);
     upsertMetaByProperty("og:description", desc);
-    upsertMetaByProperty("og:url", resolvedCanonical || "");
-    upsertMetaByProperty("og:image", resolvedImage || "");
+    upsertMetaByProperty("og:url", finalCanonical);
+    upsertMetaByProperty("og:image", resolvedImage);
     upsertMetaByProperty("og:locale", locale);
 
     // Twitter
     upsertMetaByName("twitter:card", "summary_large_image");
     upsertMetaByName("twitter:title", title);
     upsertMetaByName("twitter:description", desc);
-    upsertMetaByName("twitter:image", resolvedImage || "");
+    upsertMetaByName("twitter:image", resolvedImage);
     if (twitterSite) upsertMetaByName("twitter:site", twitterSite);
     if (twitterCreator) upsertMetaByName("twitter:creator", twitterCreator);
 
     // Canonical link
-    if (resolvedCanonical) {
+    {
       let link = document.head.querySelector('link[rel="canonical"]');
       if (!link) {
         link = document.createElement("link");
         link.setAttribute("rel", "canonical");
         document.head.appendChild(link);
       }
-      link.setAttribute("href", resolvedCanonical);
+      link.setAttribute("href", finalCanonical);
     }
 
-    // JSON-LD for Article (optional)
+    // JSON-LD Article (si type === "article")
     if (type === "article") {
       const jsonLd = {
         "@context": "https://schema.org",
@@ -92,14 +132,19 @@ export default function Seo({
         headline: title,
         description: desc,
         image: resolvedImage ? [resolvedImage] : undefined,
-        datePublished: datePublished || dateModified || undefined,
+        datePublished: datePublished || undefined,
         dateModified: dateModified || datePublished || undefined,
+        mainEntityOfPage: { "@type": "WebPage", "@id": finalCanonical },
         author: { "@type": "Organization", name: "GTA 6 Guides" },
-        mainEntityOfPage: resolvedCanonical
-          ? { "@type": "WebPage", "@id": resolvedCanonical }
-          : undefined,
+        publisher: {
+          "@type": "Organization",
+          name: "GTA 6 Guides",
+          logo: { "@type": "ImageObject", url: resolveImage("/images/logo.png") }
+        }
       };
-      let script = document.head.querySelector('script[type="application/ld+json"][data-seo-jsonld="article"]');
+      let script = document.head.querySelector(
+        'script[type="application/ld+json"][data-seo-jsonld="article"]'
+      );
       if (!script) {
         script = document.createElement("script");
         script.type = "application/ld+json";
@@ -108,11 +153,25 @@ export default function Seo({
       }
       script.textContent = JSON.stringify(jsonLd);
     } else {
-      // cleanup any prior article json-ld if navigating
-      const prev = document.head.querySelector('script[type="application/ld+json"][data-seo-jsonld="article"]');
+      const prev = document.head.querySelector(
+        'script[type="application/ld+json"][data-seo-jsonld="article"]'
+      );
       if (prev) prev.remove();
     }
-  }, [title, description, url, image, type, locale, twitterSite, twitterCreator, noindex, canonical, datePublished, dateModified]);
+  }, [
+    title,
+    description,
+    url,
+    image,
+    type,
+    locale,
+    twitterSite,
+    twitterCreator,
+    noindex,
+    canonical,
+    datePublished,
+    dateModified,
+  ]);
 
-  return null; // rien à rendre
+  return null;
 }
