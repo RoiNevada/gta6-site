@@ -24,7 +24,7 @@ function ArticleCard({ a }) {
         {/* Image + date en overlay */}
         <div className="card-cover">
           {a.cover ? (
-            <img src={a.cover} alt="" loading="lazy" decoding="async" fetchpriority="low" />
+            <img src={a.cover} alt={a.title || ""} loading="lazy" decoding="async" fetchpriority="low" />
           ) : (
             <div aria-hidden="true" />
           )}

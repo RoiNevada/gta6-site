@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run build:seo && vite build",
     "prebuild": "node ./scripts/generate-sitemap.mjs && node ./scripts/generate-rss.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
-    "sitemap": "SITE_URL=http://localhost:5173 node ./scripts/generate-sitemap.mjs",
-    "rss": "SITE_URL=http://localhost:5173 node ./scripts/generate-rss.mjs"
+    "sitemap": "SITE_URL=https://gta6-site.vercel.app node ./scripts/generate-sitemap.mjs",
+    "rss": "SITE_URL=https://gta6-site.vercel.app node ./scripts/generate-rss.mjs",
+    "build:seo": "npm run sitemap && npm run rss"
   },
   "dependencies": {
     "dompurify": "^3.2.6",

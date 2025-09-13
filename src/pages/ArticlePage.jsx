@@ -53,48 +53,13 @@ export default function ArticlePage() {
         title={`${a.title} – GTA 6 Guides`}
         description={a.excerpt || "Article GTA 6"}
         url={canonicalUrl}
+        canonical={canonicalUrl}
         image={a.cover || "/images/vicecity.jpg"}
         type="article"
+        datePublished={a.date}
+        dateModified={a.date}
       />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            "mainEntityOfPage": {
-              "@type": "WebPage",
-              "@id": canonicalUrl
-            },
-            "headline": a.title,
-            "description": a.excerpt || "",
-            "image": a.cover ? [a.cover] : undefined,
-            "datePublished": a.date,
-            "dateModified": a.date,
-            "author": { "@type": "Organization", "name": "GTA 6 Guides" },
-            "publisher": {
-              "@type": "Organization",
-              "name": "GTA 6 Guides",
-              "logo": { "@type": "ImageObject", "url": "/images/logo.png" }
-            }
-          })
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-              { "@type": "ListItem", "position": 1, "name": "Accueil", "item": typeof window !== 'undefined' ? window.location.origin + '/' : 'https://example.com/' },
-              { "@type": "ListItem", "position": 2, "name": a.category },
-              { "@type": "ListItem", "position": 3, "name": a.title, "item": canonicalUrl }
-            ]
-          })
-        }}
-      />
+      
       <div className="container article">
         <Link to="/" className="link" onMouseEnter={prefetchHomePage} onFocus={prefetchHomePage}>← Accueil</Link>
         <h1>{a.title}</h1>
@@ -112,8 +77,9 @@ export default function ArticlePage() {
             className="cover"
             src={a.cover}
             alt={a.title}
-            eager
-            fetchpriority="high"
+            width={1200}
+            height={675}
+            fetchpriority="low"
           />
         )}
 

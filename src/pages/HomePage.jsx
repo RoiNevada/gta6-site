@@ -68,6 +68,11 @@ export default function HomePage() {
             ? window.location.origin + "/"
             : "https://example.com/"
         }
+        canonical={
+          typeof window !== "undefined"
+            ? window.location.origin + "/"
+            : "https://example.com/"
+        }
         image="/images/vicecity.jpg"
       />
 

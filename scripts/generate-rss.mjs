@@ -11,7 +11,10 @@ const SITE_URL = process.env.SITE_URL || "http://localhost:5173";
 
 // Load articles
 const articlesModule = await import(path.join(root, "src", "data", "articles.js"));
-const articles = (articlesModule.articles || []).slice().sort((a,b) => new Date(b.date) - new Date(a.date));
+const articles = (articlesModule.articles || [])
+  .slice()
+  .sort((a,b) => new Date(b.date) - new Date(a.date))
+  .slice(0, 20);
 
 const escape = (s = "") => s
   .replace(/&/g, "&amp;")
@@ -46,4 +49,3 @@ fs.writeFileSync(outPath, rss, "utf8");
 console.log(`✅ RSS généré : ${outPath}`);
 console.log(`   Items : ${articles.length}`);
 console.log(`   Domaine : ${SITE_URL}`);
-

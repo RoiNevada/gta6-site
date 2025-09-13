@@ -15,14 +15,19 @@ const articlesModule = await import(path.join(root, "src", "data", "articles.js"
 const articles = articlesModule.articles || [];
 
 // 3) Construit la liste d'URL
+const isoNow = new Date().toISOString();
 const urls = [
-  { loc: `${SITE_URL}/`, changefreq: "daily", priority: "1.0" },
-  ...articles.map(a => ({
-    loc: `${SITE_URL}/article/${a.slug}`,
-    lastmod: a.date,
-    changefreq: "weekly",
-    priority: "0.8"
-  }))
+  { loc: `${SITE_URL}/`, lastmod: isoNow, changefreq: "daily", priority: "1.0" },
+  ...articles.map(a => {
+    const d = a.date ? new Date(a.date) : new Date();
+    const lastmod = isNaN(d.getTime()) ? isoNow : d.toISOString();
+    return {
+      loc: `${SITE_URL}/article/${a.slug}`,
+      lastmod,
+      changefreq: "weekly",
+      priority: "0.8"
+    };
+  })
 ];
 
 // 4) XML
