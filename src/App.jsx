@@ -44,7 +44,7 @@ export default function App() {
         transition={{ duration: 0.3 }}
       >
         <Link to="/" className="brand">
-          <img src="/images/logo.png" alt="GTA 6" className="brand-logo" />
+          <img src="/images/logo.png?v=2" alt="GTA 6" className="brand-logo" width="28" height="28" decoding="async" />
           <span className="brand-text">GTA 6 Blog</span>
         </Link>
 
