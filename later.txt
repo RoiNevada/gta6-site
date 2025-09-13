@@ -1,0 +1,5 @@
+-régler problème favicon
+- génerer image qualité ia
+- meilleur système d'écriture d'article
+- indexer le site 
+- Mettre section article populaire 
