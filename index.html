@@ -7,23 +7,47 @@
     <title>GTA 6 – Guides & Actus</title>
 
     <!-- SEO de base -->
-    <meta name="description" content="Toute l’actu de GTA 6 : cartes, missions, personnages, gameplay et astuces. Guides et news au même endroit.">
+    <meta
+      name="description"
+      content="Toute l’actu de GTA 6 : cartes, missions, personnages, gameplay et astuces. Guides et news au même endroit."
+    />
 
-    <!-- Open Graph par défaut (la page Article aura ses propres balises via Seo.jsx) -->
+    <!-- Open Graph par défaut -->
     <meta property="og:site_name" content="GTA 6 Guides" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="GTA 6 – Guides & Actus" />
-    <meta property="og:description" content="Toute l’actu de GTA 6 : cartes, missions, personnages, gameplay et astuces." />
+    <meta
+      property="og:description"
+      content="Toute l’actu de GTA 6 : cartes, missions, personnages, gameplay et astuces."
+    />
     <meta property="og:image" content="/images/vicecity.jpg" />
     <meta property="og:url" content="/" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="alternate" type="application/rss+xml" title="GTA 6 Guides RSS" href="/rss.xml" />
-    <!-- Favicons à la racine (+ cache-bust) -->
-    <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=6" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=6" />
+
+    <!-- Flux RSS -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="GTA 6 Guides RSS"
+      href="/rss.xml"
+    />
+
+    <!-- ✅ Nouveau favicon (PNG renommé pour casser le cache) -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-new.png?v=1"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon.png?v=1"
+    />
+
+    <!-- Preload du logo -->
+    <link rel="preload" as="image" href="/images/logo.png?v=2" />
   </head>
   <body>
     <div id="root"></div>
