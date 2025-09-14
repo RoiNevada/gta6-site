@@ -33,7 +33,7 @@ Une map plus **dense** et plus **vivante** que jamais.
     category: "Personnages",
     date: "2025-08-29",
     excerpt: "Premier duo jouable de la saga, dynamique à la Bonnie & Clyde.",
-    cover: "/images/lucia-jason.jpg",
+    cover: "/images/lucia-jason.png",
     content: `
 ## Qui sont-ils ?
 Lucia est introduite comme protagoniste principale avec Jason.  
